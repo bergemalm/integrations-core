@@ -1,6 +1,4 @@
-from . import kong
-
-Kong = kong.Kong
+from .kong import Kong
 
 __all__ = [
     '__version__',

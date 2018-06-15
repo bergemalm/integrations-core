@@ -2,7 +2,7 @@
 
 ## 1.1.0 / 2018-06-13
 
-* [Added] [Update] Update auto_conf.yaml template. See [#1523](https://github.com/DataDog/integrations-core/pull/1523).
+* [Added] Update auto_conf.yaml template. See [#1523](https://github.com/DataDog/integrations-core/pull/1523).
 
 ## 1.0.1 / 2017-11-21
 

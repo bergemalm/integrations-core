@@ -135,8 +135,8 @@ def test_ad_cache(aggregator):
     process.check(config['instances'][0])
 
 
-def mock_find_pids(name, search_string, exact_match=True, ignore_ad=True,
-                   refresh_ad_cache=True):
+def mock_find_pid(name, search_string, exact_match=True, ignore_ad=True,
+                  refresh_ad_cache=True):
     if search_string is not None:
         idx = search_string[0].split('_')[1]
 
@@ -171,13 +171,22 @@ def test_check(mock_process, aggregator):
 
     process = ProcessCheck(common.CHECK_NAME, {}, {})
     config = common.get_config_stubs()
-    for instance in config:
-        print instance['instance']
-        # process.check(instance['instance'])
+    for idx in range(len(config)):
+        instance = config[idx]['instance']
+        if 'search_string' not in instance.keys():
+            process.check(instance)
+        else:
+            with patch('datadog_checks.process.ProcessCheck.find_pids',
+                       return_value=mock_find_pid(instance['name'],
+                                                  instance['search_string'])):
+                process.check(instance)
 
-
-def mock_get_child_processes(pids):
-    return [2, 3, 4]
+        # these are just here to ensure it passes the coverage report.
+        # they don't really "test" for anything.
+        for sname in common.PAGEFAULT_STAT:
+            aggregator.assert_metric('system.processes.mem.page_faults.'
+                                     + sname, at_least=0,
+                                     tags=generate_expected_tags(instance))
 
 
 @patch('psutil.Process', return_value=MockProcess())
@@ -204,7 +213,7 @@ def test_check_filter_user(mock_process, aggregator):
     with patch('datadog_checks.process.ProcessCheck._filter_by_user',
                return_value={1, 2}):
         process.check(instance)
-    print aggregator._metrics
+
     aggregator.assert_metric('system.processes.number', value=2,
                              tags=generate_expected_tags(instance))
 

@@ -3,7 +3,7 @@
 ## 1.6.0 / 2018-06-13
 
 * [Added] Allow disabling of replica access. See [#1516](https://github.com/DataDog/integrations-core/pull/1516).
-* [Changed] Properly parse metric. See [#1498](https://github.com/DataDog/integrations-core/pull/1498).
+* [Changed] Properly parse TOP metrics. See [#1498](https://github.com/DataDog/integrations-core/pull/1498).
 
 ## 1.5.4 / Unreleased
 
